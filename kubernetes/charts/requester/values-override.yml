@@ -19,6 +19,8 @@ args:
     export $(ssh-agent | cut -d';' -f1 | head -n 1);
     ssh-add /etc/ssh-agent/requester_key;
     /usr/local/bin/ssh-cert-authority request -e test --reason 'lol bantz thats why!' --ssh-dir /etc/ssh-agent;
+    mkdir -p ~/.ssh;
+    cat /etc/ssh-agent/sshd-app-host-address >> ~/.ssh/known_hosts;
     sleep infinity;
 
 service:
@@ -35,6 +37,10 @@ extraVolumeMounts:
     mountPath: "/etc/ssh-agent/requester_key.pub"
     subPath: "requester-key.pub"
     readOnly: true
+  - name: sshd-key
+    mountPath: "/etc/ssh-agent/sshd-app-host-address"
+    subPath: "sshd-pub-key"
+    readOnly: true
 
 extraVolumes:
   - name: ssh
@@ -44,4 +50,8 @@ extraVolumes:
   - name: ssh-pub
     secret: 
       secretName: requester-pub-key
+      defaultMode: 0400
+  - name: sshd-key
+    secret: 
+      secretName: sshd-pub-key
       defaultMode: 0400

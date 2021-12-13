@@ -45,7 +45,7 @@ ssh-add /etc/ssh-agent/signer_key
 
 6. List the pending requests
 ```bash
-/usr/local/bin/ssh-cert-authority sign -e test
+/usr/local/bin/ssh-cert-authority list -e test
 ```
 
 7. Sign the new certificate request.

@@ -81,19 +81,19 @@ echo "sshd-hostc $(kubectl exec deploy/sshd-hostc-app -- cat /etc/ssh/ssh_host_r
 ### ssh to `sshd-app` (direct connection)
 ```bash
 ssh -F ~/.ssh/config sshd
-ssh -F ssh_config sshd
+# format: ssh -F ssh_config sshd
 ```
 
 ### ssh to `sshd-hostb-app` (proxied through sshd-app)
 The `sshd-hostb` is not accessible directly from outside the cluster. The `sshd` pod acts as a ssh proxy to allow a connection to take place.
 ```bash
-ssh -F ssh_config sshd-hostb
 ssh -F ~/.ssh/config sshd-hostb
+# format: ssh -F ssh_config sshd-hostb
 ```
 
 ### ssh to `sshd-hostc-app` (proxied through sshd-app then sshd-hostb-app)
 Proof of concept for bypassing multiple firewalls/levels of security.
 ```bash
 ssh -F ~/.ssh/config sshd-hostc
-ssh -F ssh_config sshd-hostc
+# format: ssh -F ssh_config sshd-hostc
 ```

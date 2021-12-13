@@ -91,7 +91,7 @@ kind create cluster --config provider/kind/cluster.yml
 ```
 ### Wait for the kind cluster's node to become ready
 ```bash
-kubectl wait --for=condition=ready node -l kubernetes.io/hostname=kind-control-plane
+kubectl wait --timeout=300s --for=condition=ready node -l kubernetes.io/hostname=kind-control-plane
 ```
 
 ### Deploy kubernetes components
@@ -122,6 +122,12 @@ This stage deploys the following resources using helm and kubernetes manifests:
     - `sshd-app` 
       - Exposes the sshd ssh server pod to the cluster on port 22
       - Exposes the sshd ssh server pod outside of the cluster on port 30022 (with kind, localhost:30022)
+    - `sshd-hostb-app` 
+      - Exposes the sshd ssh server pod to the cluster on port 22.
+      - Used for assh (Advanced Secure SHell) proxying integration.
+    - `sshd-hostc-app` 
+      - Exposes the sshd ssh server pod to the cluster on port 22.
+      - Used for assh (Advanced Secure SHell) proxying integration.
 
 ```bash
 cd kubernetes
@@ -146,19 +152,24 @@ helm upgrade --install sshd-hostc charts/generic/ --values charts/sshd-hostc/val
 
 echo
 echo "Waiting for certd pod to become ready"
-kubectl wait --for=condition=ready pod -l app=certd-app
+kubectl wait --timeout=300s --for=condition=ready pod -l app=certd-app
 
 helm upgrade --install requester charts/generic/ --values charts/requester/values-override.yml
 
 echo
-echo "Waiting for requester pod to become ready"
-kubectl wait --for=condition=ready pod -l app=requester-app
+echo "Waiting for sshd pods to become ready"
+kubectl wait --timeout=300s --for=condition=ready pod -l app=sshd-app
+kubectl wait --timeout=300s --for=condition=ready pod -l app=sshd-hostb-app
+kubectl wait --timeout=300s --for=condition=ready pod -l app=sshd-hostc-app
 
 echo
-echo "Waiting for sshd pods to become ready"
-kubectl wait --for=condition=ready pod -l app=sshd-app
-kubectl wait --for=condition=ready pod -l app=sshd-hostb-app
-kubectl wait --for=condition=ready pod -l app=sshd-hostc-app
+echo "Creating secret to inject sshd-app host rsa key into requester pod known hosts file"
+kubectl delete secret sshd-pub-key --ignore-not-found; kubectl create secret generic sshd-pub-key --from-literal=sshd-pub-key="sshd-app $(kubectl exec deploy/sshd-app -- /bin/bash -c 'cat /etc/ssh/ssh_host_rsa_key.pub')";
+
+echo
+echo "Waiting for requester pod to become ready"
+kubectl wait --timeout=300s --for=condition=ready pod -l app=requester-app
+
 ```
 
 Output:
@@ -244,7 +255,7 @@ ssh-add /etc/ssh-agent/requester_key
 - `ssh` to the sshd pod:
 
 ```bash
-ssh ubuntu@sshd-app -i /etc/ssh-agent/requester_key-cert.pub
+ssh ubuntu@sshd-app
 ```
 
 Output:
