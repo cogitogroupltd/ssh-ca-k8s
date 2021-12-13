@@ -1,0 +1,6 @@
+{
+    "test": {
+        "KeyFingerprint": "##SIGNER##",
+        "SignerUrl": "http://certd-app:8080/"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "test": {
+          "NumberSignersRequired": 1,
+          "MaxCertLifetime": 0,
+          "SigningKeyFingerprint": "##CA_KEY##",
+          "AuthorizedSigners": {
+            "##CA_KEY##":"certd",
+            "##SIGNER##":"signer"
+          },
+          "AuthorizedUsers": {
+            "##CA_KEY##":"certd",
+            "##REQUESTER##":"requester"
+          }
+    }
+}

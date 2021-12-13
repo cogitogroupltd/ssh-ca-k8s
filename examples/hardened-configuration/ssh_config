@@ -1,0 +1,90 @@
+## Client side settings
+
+# More commonly changed settings
+BatchMode yes 
+# ^optimistically set as "yes" for the future, but practically may be "no" until it's confirmed that all common workflows don't require prompting
+StrictHostKeyChecking yes
+
+# Settings for specific session use cases; set to deny by default, but reasonable to override
+ClearAllForwardings yes
+ForwardAgent no
+ForwardX11 no
+GatewayPorts no
+
+# Keepalive settings
+ServerAliveInterval 32 
+# ^may be 0 at times
+TCPKeepAlive no
+
+# Denial of password authentication
+KbdInteractiveAuthentication no
+PasswordAuthentication no
+
+# Other settings
+HashKnownHosts no
+UsePrivilegedPort yes 
+# ^perhaps this is still a remaining/hidden option?
+VerifyHostKeyDNS no 
+# ^optimistically, although may need to set this to ask (unclear how this works for private / self-hosted infrastructure). Doesn't work with proxying ssh connections within local kubernetes cluster, so 'no'
+
+# Cryptography settings (may reduce list of options over time as preferred use converges)
+CASignatureAlgorithms rsa-sha2-512,sk-ssh-ed25519@openssh.com
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com
+FingerprintHash sha256
+HostKeyAlgorithms rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com
+HostbasedAcceptedAlgorithms rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com
+KexAlgorithms sntrup761x25519-sha512@openssh.com,diffie-hellman-group18-sha512,diffie-hellman-group-exchange-sha256
+MACs hmac-sha2-512-etm@openssh.com
+PubkeyAcceptedAlgorithms rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ssh-ed25519@openssh.com,ssh-ed25519-cert-v01@openssh.com 
+
+# More fixed settings
+#AddKeysToAgent yes | ask | confirm time-int | no # not clear what to put here yet...
+AddressFamily inet6
+#BindAddress 10.zt.x.y
+#BindInterface zt_if_id
+CanonicalDomains internal
+CanonicalizeFallbackLocal no
+CanonicalizeHostname no
+CanonicalizeMaxDots 3
+CanonicalizePermittedCNAMEs none
+CertificateFile filename
+ChallengeResponseAuthentication no
+CheckHostIP yes
+Compression no
+ConnectTimeout 48
+ConnectionAttempts 2
+#ControlMaster no
+#ControlPath /dev/null
+#ControlPersist no
+EnableSSHKeysign yes
+ExitOnForwardFailure yes
+ForwardX11Timeout 1h
+ForwardX11Trusted no
+#GSSAPI* and Kerberos options usually compiled out at source level from custom OpenSSH build
+GlobalKnownHostsFile /etc/ssh/ssh_known_hosts
+HostbasedAuthentication no
+IPQoS reliability
+IdentitiesOnly no
+IdentityAgent SSH_AUTH_SOCK
+#KnownHostsCommand script
+NoHostAuthenticationForLocalhost no
+NumberOfPasswordPrompts 2
+PermitLocalCommand no
+PreferredAuthentications publickey
+Protocol 2
+PubkeyAuthentication yes
+RekeyLimit 42M
+RevokedHostKeys /etc/ssh/ssh_revoked_host_keys
+ServerAliveCountMax 4
+#SetEnv
+StreamLocalBindMask 0177
+StreamLocalBindUnlink no
+UpdateHostKeys no
+UseRoaming no
+UserKnownHostsFile ~/.ssh/known_hosts
+VisualHostKey no
+
+# Other configuration to allow for per-node evaluation or inclusion for modularity (note assh/ssh-cert-authority compatibility foremost, as possible)
+#Host ...
+#Match ...
+#Include conditional_include_file # an option for modularity

@@ -1,0 +1,15 @@
+{
+    "test": {
+          "NumberSignersRequired": 1,
+          "MaxCertLifetime": 0,
+          "SigningKeyFingerprint": "ef:75:d3:ec:e5:85:62:87:22:87:5d:99:6a:14:79:2d",
+          "AuthorizedSigners": {
+            "ef:75:d3:ec:e5:85:62:87:22:87:5d:99:6a:14:79:2d":"certd",
+            "3c:2b:04:b7:22:dc:9f:90:68:1b:10:7a:f9:9d:7f:ab":"signer"
+          },
+          "AuthorizedUsers": {
+            "ef:75:d3:ec:e5:85:62:87:22:87:5d:99:6a:14:79:2d":"certd",
+            "9c:73:1a:e2:96:85:af:8a:c7:1c:3e:06:eb:fa:81:50":"requester"
+          }
+    }
+}

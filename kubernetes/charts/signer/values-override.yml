@@ -1,0 +1,57 @@
+# Default values
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: naqibdocker/certd
+  pullPolicy: Always
+  tag: "latest"
+
+command:
+  - /bin/bash
+  - -c
+
+args:
+  - sleep infinity;
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+extraVolumeMounts:
+  - name: ssh
+    mountPath: "/etc/ssh-agent/signer_key"
+    subPath: "signer-key"
+    readOnly: true
+  - name: ssh-pub
+    mountPath: "/etc/ssh-agent/signer_key.pub"
+    subPath: "signer-key.pub"
+    readOnly: true
+  - name: req-id
+    mountPath: "/etc/ssh-agent/request_id"
+    subPath: "request-id"
+    readOnly: true
+  - name: config
+    mountPath: "/root/.ssh_ca/signer_config.json"
+    subPath: "signer_config.json"
+    readOnly: true
+
+extraVolumes:
+  - name: ssh
+    secret: 
+      secretName: signer-key
+      defaultMode: 0400
+  - name: ssh-pub
+    secret: 
+      secretName: signer-pub-key
+      defaultMode: 0400
+  - name: req-id
+    secret: 
+      secretName: request-id
+      defaultMode: 0400
+  - name: config
+    configMap:
+      name: ssh-ca-signer-config
