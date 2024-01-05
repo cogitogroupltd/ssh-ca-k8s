@@ -209,11 +209,11 @@ cd docker
 
 docker build -t ssh-ca .
 
-docker tag ssh-ca naqibdocker/ssh-ca-test:latest
+docker tag ssh-ca cogitoexample/ssh-ca-test:latest
 
-docker login --username naqibdocker -p ###
+docker login --username cogitoexample -p ###
 
-docker push naqibdocker/ssh-ca-test:latest
+docker push cogitoexample/ssh-ca-test:latest
 ```
 
 ## Build kind cluster

@@ -12,7 +12,7 @@ args:
   - sleep infinity;
 
 image:
-  repository: naqibdocker/sshd-kubernetes
+  repository: cogitoexample/sshd-kubernetes
   pullPolicy: Always
   tag: "latest"
 

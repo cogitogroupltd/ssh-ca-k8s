@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: naqibdocker/certd
+  repository: cogitoexample/certd
   pullPolicy: Always
   tag: "latest"
 

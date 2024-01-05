@@ -1,32 +1,14 @@
-# SSH-Cert-Authority POC
+# ssh-cert-authority Kubernetes POC
 
-**ToDo:**
+**IMPORTANT** This is a proof of concept and should only be used for development purposes
 
-- [x] Deploy cluster resources using Helm
-- [x] Update OpenSSH server version to 8.8
-- [x] Harden OpenSSH client-side configuration
-- [x] Deploy a second OpenSSH server, and build a tunnel from one to the other using `assh`
-- [ ] Harden OpenSSH server-side configuration
-- [ ] Run containers as non-root
-- [ ] Create helm chart with ZeroTier networking configuration option, migrate all 4 apps to helm chart
-- [ ] Move SSH keys to a RAM disk
-- [ ] Convert bash scripting to pure Kubernetes
-- [ ] Deploy to a cloud using Pulumi and ensure idempondence 
+An SSH server public key management utility with multi approvers (signers) for each requester. 
+
+Ideal low cost and flexible configuration solution for granting temporary "work from home" SSH access.
+
+Ref: https://github.com/cloudtools/ssh-cert-authority
 
 
-## Tasks
-
-1.	[x] Setup ssh-cert-authority locally to confirm workflow.
-2.	[x] Setup and expose ssh-cert-authority backend within VM.
-3.	[x] Containerize ssh-cert-authority daemon.
-4.	[x] Deploy Kubernetes cluster and resources.
-5.	[x] Test certificate request and authorization process for ssh-cert-authority container.
-6.	[x] Confirm authorized certificate allows ssh access to machines where CA is authorized.
-7.	[ ] Deploy ZeroTier network on Kubernetes nodes and confirm connectivity from outside.
-8.	[ ] Integrate ZeroTier network to Kubernetes pods.
-
-
-# Deploy and test containerized ssh-cert-authority
 
 ## Prerequisites
 1. `kubectl`
@@ -54,9 +36,9 @@
 cd docker/certd
 
 docker build -t certd:latest .
-docker tag certd naqibdocker/certd:latest
-docker login --username naqibdocker -p ###
-docker push naqibdocker/certd:latest
+docker tag certd cogitoexample/certd:latest
+docker login --username cogitoexample -p ###
+docker push cogitoexample/certd:latest
 ```
 
 ### Build and push `sshd` image
@@ -70,10 +52,10 @@ This is used to create a pod to use the retrieved certificate to ssh into. If yo
 cd docker/sshd
 
 docker build -t sshd:latest . --build-arg OPENSSH_VERSION=8.8p1
-docker tag sshd:latest naqibdocker/sshd-kubernetes:latest
-docker login --username naqibdocker -p ###password###
+docker tag sshd:latest cogitoexample/sshd-kubernetes:latest
+docker login --username cogitoexample -p ###password###
 
-docker push naqibdocker/sshd-kubernetes:latest
+docker push cogitoexample/sshd-kubernetes:latest
 ```
 
 ## Setup local kubernetes (kind) cluster
